@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Camera, Mail, User } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore.js'
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore(state => state);
   const [selectedImg, setSelectedImg] = useState(null);
   const [isEditing, setIsEditing] = useState(false); //FOR EDITING
+  const navigate = useNavigate();
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -136,6 +138,20 @@ const ProfilePage = () => {
                 Edit Profile
               </button>
             )}
+          </div>
+
+          {/* DELETE ACCOUNT */}
+          <div className="mt-4">
+            <button
+              className="btn btn-error btn-outline w-full"
+              onClick={() => {
+                if (confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+                  useAuthStore.getState().deleteAccount(navigate);
+                }
+              }}
+            >
+              Delete Account
+            </button>
           </div>
 
 

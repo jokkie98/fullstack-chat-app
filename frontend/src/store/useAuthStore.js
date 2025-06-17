@@ -87,6 +87,27 @@ export const useAuthStore = create((set, get)=>({
   }
 },
 
+deleteAccount: async () => {
+  try {
+    const res = await fetch('/api/auth/delete', {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || 'Failed to delete account');
+
+    // Clear local user state
+    set({ authUser: null });
+
+    // Redirect to login page
+    navigate('/login');
+  } catch (error) {
+    console.error('Delete Account Error:', error.message);
+  }
+},
+
 
   connectSocket: () => {
     const {authUser} = get();

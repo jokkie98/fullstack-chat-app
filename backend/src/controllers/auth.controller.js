@@ -124,4 +124,21 @@ export const checkAuth = (req, res) => {
   }
 };
 
+export const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await User.findByIdAndDelete(userId);
+    
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    statusHandler(res, 200, 'Account deleted successfully');
+  } catch (error) {
+    console.log('Error deleting account:', error.message);
+    statusHandler(res, 500, 'Internal Server Error');
+  }
+};
 
